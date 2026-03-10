@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://contracts.kalynow.com/events/offer-reserved.schema.json",
+  "title": "OfferReservedEvent",
+  "description": "Published when a buyer successfully reserves an offer on the kalyNow platform.",
+  "type": "object",
+  "required": ["eventId", "eventName", "occurredAt", "source", "payload"],
+  "additionalProperties": false,
+  "properties": {
+    "eventId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "eventName": {
+      "type": "string",
+      "const": "offer_reserved"
+    },
+    "occurredAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "source": {
+      "type": "string"
+    },
+    "correlationId": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "payload": {
+      "type": "object",
+      "required": ["offerId", "sellerId", "buyerId", "reservationDurationSeconds", "reservedAt", "expiresAt"],
+      "additionalProperties": false,
+      "properties": {
+        "offerId": { "type": "string", "format": "uuid" },
+        "sellerId": { "type": "string", "format": "uuid" },
+        "buyerId": { "type": "string", "format": "uuid" },
+        "reservationDurationSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Duration in seconds for which the offer is held."
+        },
+        "reservedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "When the reservation automatically expires if not confirmed."
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "eventId": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "eventName": "offer_reserved",
+      "occurredAt": "2024-06-02T09:15:00Z",
+      "source": "offer-service",
+      "payload": {
+        "offerId": "11111111-1111-1111-1111-111111111111",
+        "sellerId": "22222222-2222-2222-2222-222222222222",
+        "buyerId": "33333333-3333-3333-3333-333333333333",
+        "reservationDurationSeconds": 3600,
+        "reservedAt": "2024-06-02T09:15:00Z",
+        "expiresAt": "2024-06-02T10:15:00Z"
+      }
+    }
+  ]
+}
