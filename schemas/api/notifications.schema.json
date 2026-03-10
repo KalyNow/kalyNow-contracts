@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://contracts.kalynow.com/api/notifications.schema.json",
+  "title": "Notifications API",
+  "description": "JSON Schema definitions for the kalyNow Notifications REST API.",
+  "definitions": {
+    "Notification": {
+      "type": "object",
+      "required": ["id", "recipientId", "channel", "status", "category", "title", "body", "createdAt"],
+      "properties": {
+        "id": { "type": "string", "format": "uuid" },
+        "recipientId": { "type": "string", "format": "uuid" },
+        "channel": { "type": "string", "enum": ["push", "email", "sms", "in_app"] },
+        "status": { "type": "string", "enum": ["pending", "sent", "delivered", "opened", "failed"] },
+        "category": { "type": "string", "enum": ["offer_activity", "reservation", "account", "marketing", "system"] },
+        "title": { "type": "string", "minLength": 1 },
+        "body": { "type": "string", "minLength": 1 },
+        "actionUrl": { "type": "string", "format": "uri" },
+        "data": { "type": "object" },
+        "sentAt": { "type": "string", "format": "date-time" },
+        "deliveredAt": { "type": "string", "format": "date-time" },
+        "openedAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "SendNotificationRequest": {
+      "type": "object",
+      "required": ["recipientId", "channel", "category", "title", "body"],
+      "additionalProperties": false,
+      "properties": {
+        "recipientId": { "type": "string", "format": "uuid" },
+        "channel": { "type": "string", "enum": ["push", "email", "sms", "in_app"] },
+        "category": { "type": "string", "enum": ["offer_activity", "reservation", "account", "marketing", "system"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "body": { "type": "string", "minLength": 1 },
+        "actionUrl": { "type": "string", "format": "uri" },
+        "data": { "type": "object" }
+      }
+    },
+    "BatchOpenNotificationsRequest": {
+      "type": "object",
+      "required": ["notificationIds"],
+      "additionalProperties": false,
+      "properties": {
+        "notificationIds": {
+          "type": "array",
+          "items": { "type": "string", "format": "uuid" },
+          "minItems": 1
+        },
+        "openedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}
